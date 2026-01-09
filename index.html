@@ -2,21 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Exposure Triangle Visual Simulator</title>
+<title>Exposure Simulation</title>
 <style>
 body{
   background:#0f172a;
-  color:#e5e7eb;
+  color:white;
   font-family:Arial, sans-serif;
   text-align:center;
 }
 .container{
-  max-width:800px;
+  max-width:900px;
   margin:auto;
 }
-svg{
-  width:300px;
-  margin:30px auto;
+img{
+  width:100%;
+  max-width:600px;
+  border-radius:12px;
+  transition: filter 0.3s ease;
 }
 .control{
   margin:20px 0;
@@ -25,10 +27,10 @@ input[type=range]{
   width:100%;
 }
 .badge{
-  font-size:1.2em;
+  margin-top:15px;
   padding:12px;
   border-radius:8px;
-  margin-top:20px;
+  font-size:1.2em;
 }
 .under{background:#1e3a8a;}
 .proper{background:#15803d;}
@@ -38,14 +40,10 @@ input[type=range]{
 
 <body>
 <div class="container">
-  <h1>📷 Exposure Triangle</h1>
+  <h1>📷 Exposure – Brightness Simulation</h1>
+  <p>Simulasi terang–gelap foto berdasarkan exposure</p>
 
-  <svg viewBox="0 0 200 173">
-    <polygon points="100,10 190,160 10,160" fill="#1e293b" stroke="white"/>
-    <text x="100" y="30" text-anchor="middle" fill="white">Aperture</text>
-    <text x="165" y="150" fill="white">Shutter</text>
-    <text x="35" y="150" fill="white">ISO</text>
-  </svg>
+  <img id="photo" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200" alt="Sample Photo">
 
   <div class="control">
     Aperture f/<span id="aVal">4</span>
@@ -62,9 +60,7 @@ input[type=range]{
     <input type="range" min="100" max="3200" step="100" value="100" id="iso">
   </div>
 
-  <div id="result" class="badge proper">
-    Proper Exposure
-  </div>
+  <div id="status" class="badge proper">Proper Exposure</div>
 </div>
 
 <script>
@@ -75,7 +71,9 @@ const iso=document.getElementById("iso");
 const aVal=document.getElementById("aVal");
 const sVal=document.getElementById("sVal");
 const iVal=document.getElementById("iVal");
-const result=document.getElementById("result");
+
+const photo=document.getElementById("photo");
+const status=document.getElementById("status");
 
 function update(){
   aVal.textContent=ap.value;
@@ -84,15 +82,18 @@ function update(){
 
   const exp=(iso.value/100)*(ap.value/4)/(sh.value/125);
 
+  const brightness=Math.min(Math.max(exp,0.3),2);
+  photo.style.filter=`brightness(${brightness})`;
+
   if(exp<0.7){
-    result.textContent="Underexposed";
-    result.className="badge under";
+    status.textContent="Underexposed";
+    status.className="badge under";
   }else if(exp>1.3){
-    result.textContent="Overexposed";
-    result.className="badge over";
+    status.textContent="Overexposed";
+    status.className="badge over";
   }else{
-    result.textContent="Proper Exposure";
-    result.className="badge proper";
+    status.textContent="Proper Exposure";
+    status.className="badge proper";
   }
 }
 
