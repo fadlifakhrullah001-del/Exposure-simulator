@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Exposure Simulator</title>
+</head>
+<body>
+  <h1>Exposure Simulator</h1>
+  <p>Website berhasil jalan 🚀</p>
+</body>
+</html>
